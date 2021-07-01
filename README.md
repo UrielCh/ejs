@@ -95,6 +95,7 @@ Therefore, we do not recommend using this shortcut.
     previously resolved path. Should return an object `{ filename, template }`,
     you may return only one of the properties, where `filename` is the final parsed path and `template`
     is the included content.
+  - `i18nFunctionName`      i18n function name __i18n by default
 
 This project uses [JSDoc](http://usejsdoc.org/). For the full public API
 documentation, clone the repository and run `jake doc`. This will run JSDoc

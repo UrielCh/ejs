@@ -1206,3 +1206,43 @@ suite('identifier validation', function () {
     }, /destructuredLocals\[0\] is not a valid JS identifier/);
   });
 });
+
+suite('i18n()', function () {
+  const translation = {
+    fr: {
+      'Welcome {1}!': 'Bienvenue {1}!',
+    },
+    de: {
+      'Welcome {1}!': 'Willkommen {1}!',
+    }
+  };
+  function __i18n() {
+    const { lang } = this;
+    const texts = arguments[0];
+    let text = '';
+    for (let i=1; i<texts.length; i++) {
+      text += texts[i-1];
+      text += `{${i}}`;
+    }
+    text += texts[texts.length - 1];
+    if (translation[lang][text])
+      text = translation[lang][text];
+    for (let i = 1; i < arguments.length; i++) {
+      text = text.replace(`{${i}}`, String(arguments[i]));
+    }
+    return text;
+  }
+
+  test('include ejs', function () {
+    var file = 'test/fixtures/welcome-i18n.ejs';
+    assert.equal(ejs.render(fixture('welcome-i18n.ejs'), {__i18n, lang: 'fr', name: 'marta'}, {filename: file}),
+      fixture('welcome-fr.html'));
+  });
+
+  test('include and escape ejs', function () {
+    var file = 'test/fixtures/welcome-i18n.ejs';
+    assert.equal(ejs.render(fixture('welcome-i18n.ejs'), {__i18n, lang: 'de', name: 'marta'}, {filename: file}),
+      fixture('welcome-de.html'));
+  });
+
+});
